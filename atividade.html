@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja de Computadores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .produto {
+            margin: 10px 0;
+        }
+        .carrinho {
+            margin-top: 20px;
+        }
+        .botao {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .botao:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Bem-vindo à Loja de Computadores!</h1>
+
+    <h2>Peças Disponíveis</h2>
+    <div id="produtos">
+        <!-- Produtos serão listados aqui -->
+    </div>
+
+    <div class="carrinho">
+        <h2>Carrinho</h2>
+        <ul id="carrinho-lista">
+            <!-- Produtos adicionados ao carrinho aparecerão aqui -->
+        </ul>
+        <p id="total-carrinho">Total: R$0.00</p>
+        <button class="botao" id="finalizar-compra">Finalizar Compra</button>
+    </div>
+
+    <script>
+        // Dados dos produtos (peças de computador)
+        const produtos = [
+            { id: 1, nome: "Processador Intel Core i7", preco: 1500.00 },
+            { id: 2, nome: "Placa-Mãe ASUS ROG", preco: 1200.00 },
+            { id: 3, nome: "Memória RAM Corsair 16GB", preco: 450.00 },
+            { id: 4, nome: "SSD Kingston 512GB", preco: 350.00 },
+            { id: 5, nome: "HD Seagate 1TB", preco: 300.00 },
+            { id: 6, nome: "Placa de Vídeo Nvidia RTX 3070", preco: 4000.00 },
+            { id: 7, nome: "Fonte Corsair 750W", preco: 500.00 },
+            { id: 8, nome: "Gabinete Cooler Master", preco: 350.00 },
+            { id: 9, nome: "Teclado Mecânico Logitech", preco: 400.00 },
+            { id: 10, nome: "Mouse Gamer Razer", preco: 150.00 },
+        ];
+
+        // Array para armazenar os produtos do carrinho
+        let carrinho = [];
+
+        // Função para listar os produtos
+        function listarProdutos() {
+            const produtosContainer = document.getElementById("produtos");
+            produtosContainer.innerHTML = ""; // Limpar lista de produtos
+            produtos.forEach(produto => {
+                const divProduto = document.createElement("div");
+                divProduto.classList.add("produto");
+                divProduto.innerHTML = `
+                    <span>${produto.nome} - R$${produto.preco.toFixed(2)}</span>
+                    <button class="botao" onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>
+                `;
+                produtosContainer.appendChild(divProduto);
+            });
+        }
+
+        // Função para adicionar um produto ao carrinho
+        function adicionarAoCarrinho(produtoId) {
+            const produto = produtos.find(p => p.id === produtoId);
+            if (produto) {
+                carrinho.push(produto);
+                atualizarCarrinho();
+            }
+        }
+
+        // Função para atualizar o carrinho na interface
+        function atualizarCarrinho() {
+            const carrinhoLista = document.getElementById("carrinho-lista");
+            const totalCarrinho = document.getElementById("total-carrinho");
+            carrinhoLista.innerHTML = ""; // Limpar lista do carrinho
+            let total = 0;
+
+            carrinho.forEach(produto => {
+                const li = document.createElement("li");
+                li.textContent = `${produto.nome} - R$${produto.preco.toFixed(2)}`;
+                carrinhoLista.appendChild(li);
+                total += produto.preco;
+            });
+
+            totalCarrinho.textContent = `Total: R$${total.toFixed(2)}`;
+        }
+
+        // Função para finalizar a compra
+        function finalizarCompra() {
+            if (carrinho.length === 0) {
+                alert("Seu carrinho está vazio!");
+            } else {
+                alert(`Compra finalizada com sucesso!\nTotal: R$${carrinho.reduce((acc, produto) => acc + produto.preco, 0).toFixed(2)}`);
+                carrinho = []; // Limpar carrinho após a compra
+                atualizarCarrinho(); // Atualizar visualmente o carrinho
+            }
+        }
+
+        // Ação do botão de finalizar compra
+        document.getElementById("finalizar-compra").onclick = finalizarCompra;
+
+        // Chamar a função para listar os produtos ao carregar a página
+        listarProdutos();
+    </script>
+
+</body>
+</html>
